@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SP ENTERPRISE - Surya Product Catalog</title>
+    <!-- Tailwind CSS for Professional Design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /*     */
+        body {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url('1000001357.png');
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        /*         */
+        .click-effect:active { transform: scale(0.97); transition: 0.1s; }
+        
+        /*   */
+        .fade-in { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /*    */
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: blur(12px);
+            background-color: rgba(234, 88, 12, 0.85); /*     */
+        }
+
+        /*    */
+        .category-card, .product-card {
+            background-color: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(8px);
+        }
+
+        /*    */
+        #side-menu {
+            transition: transform 0.3s ease-in-out;
+            transform: translateX(100%);
+        }
+        #side-menu.open {
+            transform: translateX(0);
+        }
+        #menu-overlay {
+            display: none;
+        }
+        #menu-overlay.open {
+            display: block;
+        }
+    </style>
+</head>
+<body class="font-sans pb-24 text-gray-800">
+
+    <!--   -->
+    <div id="menu-overlay" onclick="toggleMenu()" class="fixed inset-0 bg-black/40 z-[60]"></div>
+
+    <!--   ( ) -->
+    <div id="side-menu" class="fixed top-0 right-0 h-full w-64 bg-white/95 backdrop-blur-xl z-[70] shadow-2xl p-6">
+        <div class="flex justify-between items-center mb-10">
+            <h3 class="text-orange-600 font-bold text-xl uppercase tracking-tighter">SP ENTERPRISE</h3>
+            <button onclick="toggleMenu()" class="text-gray-500 hover:text-orange-600">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+        <nav class="space-y-6">
+            <a href="#" onclick="showCategories(); toggleMenu();" class="flex items-center space-x-4 text-gray-700 font-bold hover:text-orange-600 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                <span>Home</span>
+            </a>
+            <a href="tel:+910000000000" class="flex items-center space-x-4 text-gray-700 font-bold hover:text-orange-600 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l2.18-1.28a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                <span>Call Us</span>
+            </a>
+        </nav>
+        <div class="absolute bottom-10 left-6 text-[10px] text-gray-400 font-bold">
+             2026 SP ENTERPRISE
+        </div>
+    </div>
+
+    <!--    -->
+    <div class="sticky-header text-white p-6 rounded-b-[30px] shadow-2xl flex justify-between items-center border-b border-white/10">
+        <div class="w-8"></div> 
+        <div class="text-center">
+            <h1 class="text-2xl font-black tracking-tighter uppercase leading-none">SP ENTERPRISE</h1>
+            <p class="text-orange-100 mt-1 opacity-90 text-[10px] font-bold uppercase tracking-widest text-center">Authorized Surya Distributor</p>
+        </div>
+        <button onclick="toggleMenu()" class="click-effect p-2 rounded-xl bg-white/20 hover:bg-white/30 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+    </div>
+
+    <div class="max-w-md mx-auto px-6 mt-6">
+        
+        <!--  :   -->
+        <div id="category-view" class="fade-in">
+            <div class="flex flex-col items-center mb-8">
+                <span class="w-12 h-1.5 bg-orange-500 rounded-full mb-3 shadow-lg"></span>
+                <h2 class="text-xl font-black text-white text-center drop-shadow-lg uppercase tracking-tight">
+                    Select Category
+                </h2>
+            </div>
+            <div id="category-container" class="grid grid-cols-1 gap-4">
+                <!--      -->
+            </div>
+        </div>
+
+        <!--  :   (  ) -->
+        <div id="product-view" class="hidden fade-in">
+            <button onclick="showCategories()" class="flex items-center text-white bg-white/20 backdrop-blur-md px-4 py-2 rounded-full font-bold text-xs mb-6 active:scale-95 transition-transform">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="m15 18-6-6 6-6"/></svg>
+                BACK TO CATEGORIES
+            </button>
+            <div class="flex flex-col items-center mb-8">
+                <h2 id="current-category-name" class="text-2xl font-black text-white text-center drop-shadow-lg uppercase tracking-tighter">
+                    Category Name
+                </h2>
+            </div>
+            <div id="product-container" class="space-y-4">
+                <!--    -->
+            </div>
+        </div>
+    </div>
+
+    <!--    -->
+    <div class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-sm bg-white/90 backdrop-blur-md border border-white/20 p-4 rounded-full flex justify-around items-center shadow-[0_20px_50px_rgba(0,0,0,0.5)] z-40">
+        <a href="tel:+910000000000" class="flex flex-col items-center group">
+            <div class="bg-blue-100 p-3 rounded-full text-blue-600 group-active:scale-90 transition-transform shadow-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l2.18-1.28a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            </div>
+            <span class="text-[10px] font-bold text-gray-600 mt-1 uppercase text-center">Call</span>
+        </a>
+        <div class="h-8 w-[1px] bg-gray-200"></div>
+        <a href="https://wa.me/910000000000" class="flex flex-col items-center group">
+            <div class="bg-green-100 p-3 rounded-full text-green-600 group-active:scale-90 transition-transform shadow-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 1 1-7.6-10.6 8.38 8.38 0 0 1 3.8.9L22 2l-1.5 5.5Z"></path></svg>
+            </div>
+            <span class="text-[10px] font-bold text-gray-600 mt-1 uppercase text-center">WhatsApp</span>
+        </a>
+    </div>
+
+    <script>
+        //     (    )
+        const catalogData = {
+            "DOWNLIGHTERS": {
+                icon: "cat-downlight.jpg", //     
+                products: [
+                    { name: "Surya 12W LED Downlight", price: "210", detail: "Slim Recessed Light", img: "surya-downlight.jpg" },
+                    { name: "Surya 15W Round Downlight", price: "280", detail: "Bright Cool White", img: "surya-dl15.jpg" }
+                ]
+            },
+            "DECORATIVE LIGHTS": {
+                icon: "cat-decor.jpg",
+                products: [
+                    { name: "Surya RGB Strip Light", price: "450", detail: "5 Meter Flexible", img: "surya-strip.jpg" }
+                ]
+            },
+            "LED BATTENS": {
+                icon: "cat-batten.jpg",
+                products: [
+                    { name: "Surya 20W LED Batten", price: "220", detail: "4 Feet Tube Light", img: "surya-tube.jpg" }
+                ]
+            },
+            "LED LAMPS": {
+                icon: "cat-lamp.jpg",
+                products: [
+                    { name: "Surya 9W LED Bulb", price: "75", detail: "2 Years Warranty", img: "surya-bulb.jpg" }
+                ]
+            },
+            "EXTENSION BOARD": {
+                icon: "cat-extension.jpg",
+                products: [
+                    { name: "Surya 4-Way Power Board", price: "320", detail: "2 Meter Wire", img: "surya-ext.jpg" }
+                ]
+            },
+            "GLS, FTL, FITTINGS & BALLAST": {
+                icon: "cat-gls.jpg",
+                products: [
+                    { name: "Surya Electronic Ballast", price: "180", detail: "Copper Winding", img: "surya-ballast.jpg" }
+                ]
+            },
+            "TORCHES": {
+                icon: "cat-torch.jpg",
+                products: [
+                    { name: "Surya Rechargeable Torch", price: "290", detail: "Strong Beam", img: "surya-torch.jpg" }
+                ]
+            },
+            "IRONS": {
+                icon: "cat-iron.jpg",
+                products: [
+                    { name: "Surya Dry Iron 750W", price: "750", detail: "Teflon Coated", img: "surya-iron.jpg" }
+                ]
+            },
+            "IMMERSION HEATERS": {
+                icon: "cat-heater.jpg",
+                products: [
+                    { name: "Surya 1500W Heater", price: "480", detail: "Shock Proof Handle", img: "surya-heater.jpg" }
+                ]
+            }
+        };
+
+        function toggleMenu() {
+            const menu = document.getElementById('side-menu');
+            const overlay = document.getElementById('menu-overlay');
+            menu.classList.toggle('open');
+            overlay.classList.toggle('open');
+        }
+
+        function showCategories() {
+            document.getElementById('category-view').classList.remove('hidden');
+            document.getElementById('product-view').classList.add('hidden');
+            window.scrollTo(0, 0);
+        }
+
+        function openCategory(catName) {
+            document.getElementById('category-view').classList.add('hidden');
+            document.getElementById('product-view').classList.remove('hidden');
+            document.getElementById('current-category-name').innerText = catName;
+            
+            const container = document.getElementById('product-container');
+            container.innerHTML = '';
+            
+            const categoryObj = catalogData[catName] || { products: [] };
+            categoryObj.products.forEach(item => {
+                container.innerHTML += `
+                    <div class="product-card p-4 rounded-[1.5rem] shadow-lg flex items-center click-effect border border-white/20">
+                        <img src="${item.img}" class="w-20 h-20 rounded-2xl bg-gray-100 mr-4 object-cover border border-gray-200" 
+                             onerror="this.src='https://via.placeholder.com/150?text=Product'">
+                        <div class="flex-grow">
+                            <h3 class="font-bold text-gray-900 text-sm leading-tight">${item.name}</h3>
+                            <p class="text-[10px] text-gray-500 mt-1 font-medium">${item.detail}</p>
+                            <div class="mt-2 flex items-center justify-between">
+                                <span class="text-orange-600 font-black text-lg">${item.price}</span>
+                                <span class="text-[8px] bg-orange-100 text-orange-600 px-3 py-1 rounded-full font-bold uppercase tracking-tighter shadow-sm">ORDER NOW</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            window.scrollTo(0, 0);
+        }
+
+        //    
+        function init() {
+            const catContainer = document.getElementById('category-container');
+            const categories = Object.keys(catalogData);
+            
+            categories.forEach(cat => {
+                const catInfo = catalogData[cat];
+                catContainer.innerHTML += `
+                    <button onclick="openCategory('${cat}')" class="category-card p-3 rounded-2xl shadow-lg flex items-center click-effect border border-white/30 text-left overflow-hidden">
+                        <!--   () -->
+                        <div class="w-16 h-16 rounded-xl bg-gray-50 flex-shrink-0 overflow-hidden border border-gray-100">
+                             <img src="${catInfo.icon}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/100?text=Cat'">
+                        </div>
+                        <!--   () -->
+                        <span class="flex-grow ml-4 font-black text-gray-800 tracking-tighter text-base uppercase leading-tight">
+                            ${cat}
+                        </span>
+                    </button>
+                `;
+            });
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
+
