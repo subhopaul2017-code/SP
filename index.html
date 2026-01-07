@@ -31,12 +31,11 @@
         /* SURYA - সোজা ও লাল কালার */
         .surya-title {
             color: #ff0000;
-            font-style: normal; /* সোজা করার জন্য */
+            font-style: normal;
             filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));
             animation: zoomInWelcome 0.8s ease-out;
         }
 
-        /* বাটন এনিমেশন */
         .pulse-btn {
             animation: pulse-animation 2s infinite;
         }
@@ -52,7 +51,6 @@
             100% { transform: scale(1); }
         }
 
-        /* বাকি সব আপনার মূল কোডের স্টাইল */
         .about-page-bg {
             background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('YOUR_ABOUT_IMAGE.png');
             background-size: cover;
@@ -186,16 +184,30 @@
     </div>
 
     <script>
+        const welcome = document.getElementById('welcome-screen');
+        const mainApp = document.getElementById('main-app');
+
+        // অ্যাপ শুরু করার ফাংশন
         function startApp() {
-            const welcome = document.getElementById('welcome-screen');
-            const mainApp = document.getElementById('main-app');
             welcome.style.opacity = '0';
             welcome.style.visibility = 'hidden';
             setTimeout(() => {
                 welcome.style.display = 'none';
                 mainApp.classList.remove('hidden');
                 mainApp.classList.add('fade-in');
+                // যখন অ্যাপ শুরু হবে, তখন ব্রাউজারের হিস্ট্রিতে 'home' স্টেট পুশ হবে
+                history.pushState({view: 'home'}, "");
             }, 500);
+        }
+
+        // ওয়েলকাম পেজে ফিরে যাওয়ার ফাংশন
+        function backToWelcome() {
+            mainApp.classList.add('hidden');
+            welcome.style.display = 'flex';
+            setTimeout(() => {
+                welcome.style.opacity = '1';
+                welcome.style.visibility = 'visible';
+            }, 10);
         }
 
         const officeAddress = `89/3, Bagpara, Morepukur, <br> Rishra, Hooghly, Pin-712250`;
@@ -220,8 +232,19 @@
             window.scrollTo(0, 0);
         }
 
-        function showAbout() { switchView('about-view'); history.pushState({view: 'about'}, ""); }
-        function goBackHome() { if (history.state && history.state.view !== 'home') history.back(); else switchView('category-view'); }
+        function showAbout() { 
+            switchView('about-view'); 
+            history.pushState({view: 'about'}, ""); 
+        }
+
+        function goBackHome() { 
+            if (history.state && history.state.view !== 'home') {
+                history.back(); 
+            } else {
+                switchView('category-view'); 
+            }
+        }
+
         function openCatalogPages(name) {
             const container = document.getElementById('catalog-images-container');
             document.getElementById('current-page-name').innerText = name;
@@ -236,14 +259,24 @@
             document.getElementById('overlay').classList.toggle('hidden');
         }
 
+        // ব্যাক বাটন হ্যান্ডলার (মূল পরিবর্তন এখানে)
         window.onpopstate = (e) => {
-            if (e.state && e.state.view === 'about') switchView('about-view');
-            else switchView('category-view');
+            if (e.state) {
+                if (e.state.view === 'about') switchView('about-view');
+                else if (e.state.view === 'catalog') switchView('catalog-page-view');
+                else if (e.state.view === 'home') switchView('category-view');
+                else if (e.state.view === 'welcome') backToWelcome();
+            } else {
+                // যদি কোনো স্টেট না থাকে (একদম শুরুতে ফিরে গেলে)
+                backToWelcome();
+            }
         };
 
         window.onload = function() {
             document.getElementById('display-address').innerHTML = officeAddress;
-            history.replaceState({view: 'home'}, "");
+            // শুরুতে ব্রাউজারকে জানানো যে আমরা 'welcome' পেজে আছি
+            history.replaceState({view: 'welcome'}, "");
+            
             const container = document.getElementById('category-container');
             Object.keys(catalogData).forEach(cat => {
                 container.innerHTML += `
@@ -261,7 +294,9 @@
 
         let touchstartX = 0;
         document.addEventListener('touchstart', e => touchstartX = e.changedTouches[0].screenX);
-        document.addEventListener('touchend', e => { if (e.changedTouches[0].screenX > touchstartX + 100) goBackHome(); });
+        document.addEventListener('touchend', e => { 
+            if (e.changedTouches[0].screenX > touchstartX + 100) goBackHome(); 
+        });
     </script>
 </body>
 </html>
